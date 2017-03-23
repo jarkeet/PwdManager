@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">PwdManager</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="txt_toolbar">Toolbar</string>
+    <string name="txt_floating_action_button">FloatActionButton</string>
+    <string name="txt_navigation_view">NavigationView</string>
+    <string name="txt_other">Other</string>
+    <string name="txt_yo_yo">Yo Yo</string>
+    <string name="title_activity_code_lab">CodeLabActivity</string>
+
+    <string name="str_add_tips">请添加标签、用户名、密码</string>
+    <string name="str_userinfo_empty">用户名或密码不能为空</string>
+    <string name="str_userinfo_added">添加Tag&#060; %1$s &#062;成功</string>
+    <string name="str_go_add">去添加</string>
+</resources>
