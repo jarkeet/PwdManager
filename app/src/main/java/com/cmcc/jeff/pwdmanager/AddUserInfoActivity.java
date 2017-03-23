@@ -2,16 +2,13 @@ package com.cmcc.jeff.pwdmanager;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.cmcc.jeff.pwdmanager.utils.SpUtil;
-
+import com.cmcc.jeff.pwdmanager.event.MessageEvent;
+import org.greenrobot.eventbus.EventBus;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -32,9 +29,8 @@ public class AddUserInfoActivity extends AppCompatActivity {
     @BindView(R.id.edt_password) EditText passwordEdt;
 //    @BindView(R.id.btn_add) Button addBtn;
 
-    @OnClick(R.id.btn_add)
-    public void btn_add(Button button) {
-        Log.i("dd", "ddd");
+    @OnClick(R.id.btn_add_userinfo)
+    public void addUserInfo(Button button) {
         procAddUserInfo();
     }
 
@@ -50,13 +46,13 @@ public class AddUserInfoActivity extends AppCompatActivity {
         usernameStr = usernameEdt.getText().toString();
         passwordStr = passwordEdt.getText().toString();
         if(TextUtils.isEmpty(tagStr) || TextUtils.isEmpty(usernameStr) || TextUtils.isEmpty(passwordStr)) {
-            Snackbar.make(usernameEdt, "输入不能为空", Snackbar.LENGTH_SHORT).show();
+            Toast.makeText(this, "请输入完整", Toast.LENGTH_SHORT).show();
             return;
         }
 
         UserInfo userInfo = new UserInfo(tagStr ,usernameStr, passwordStr);
-        SpUtil.saveUserInfo(this, userInfo);
-        Toast.makeText(this, "Save UserInfo success.", Toast.LENGTH_SHORT).show();
+        UserManager.saveUserInfo(this, userInfo);
+        EventBus.getDefault().post(new MessageEvent( "MessageEvent", userInfo.getTag()));
         finish();
     }
 

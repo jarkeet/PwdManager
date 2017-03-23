@@ -9,10 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.cmcc.jeff.pwdmanager.R;
 import com.cmcc.jeff.pwdmanager.UserInfo;
-
 import java.util.List;
 
 /**
@@ -35,14 +33,14 @@ public class NormalAdapter extends RecyclerView.Adapter<NormalAdapter.VH> {
 
     @Override
     public void onBindViewHolder(VH holder, final int position) {
-        holder.mTextView.setText(dataList.get(position).getKey());
+        holder.mTextView.setText(dataList.get(position).getTag());
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "item " + position + " card clicked."
+                Toast.makeText(mContext, "item " + dataList.get(position).getTag() + " : "
                         + "\nusername : " + dataList.get(position).getUserName()
                         + "\npassword : " + dataList.get(position).getPassword()
-                        , Toast.LENGTH_SHORT).show();
+                        , Toast.LENGTH_LONG).show();
             }
         });
     }

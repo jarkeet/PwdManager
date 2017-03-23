@@ -13,15 +13,15 @@ public class UserInfo {
     public static final String PASSWORD = "PASSWORD";
     public static final String KEY = "KEY";
 
-    private String key;
+    private String tag;
     private String userName;
     private String password;
 
     public UserInfo() {
     }
 
-    public UserInfo(String key, String userName, String password) {
-        this.key = key;
+    public UserInfo(String tag, String userName, String password) {
+        this.tag = tag;
         this.userName = userName;
         this.password = password;
     }
@@ -30,12 +30,12 @@ public class UserInfo {
         return userName;
     }
 
-    public String getKey() {
-        return key;
+    public String getTag() {
+        return tag;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public void setUserName(String userName) {
@@ -52,7 +52,7 @@ public class UserInfo {
     }
 
     public void setUserInfo(String key, JSONObject jsonObject) {
-        this.key = key;
+        this.tag = key;
         this.userName = jsonObject.optString(USERNAME);
         this.password = jsonObject.optString(PASSWORD);
     }
@@ -67,7 +67,7 @@ public class UserInfo {
             e.printStackTrace();
         }
 
-        return "key : " + key + "-->"
+        return "tag : " + tag + "-->"
                 + "value : " + jsonObject.toString();
     }
 }

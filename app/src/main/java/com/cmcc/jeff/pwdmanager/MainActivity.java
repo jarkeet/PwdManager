@@ -14,28 +14,34 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
+import android.widget.Toast;
 import com.cmcc.jeff.pwdmanager.adapter.NormalAdapter;
+import com.cmcc.jeff.pwdmanager.event.MessageEvent;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    Toolbar toolbar;
-    CollapsingToolbarLayout collapsingToolbarLayout;
+    private Toolbar toolbar;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
 
-    DrawerLayout drawerLayout;
-    ActionBarDrawerToggle drawerToggle;
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
 
-    CoordinatorLayout rootLayout;
-    FloatingActionButton fabBtn;
+    private CoordinatorLayout rootLayout;
+    private FloatingActionButton fabBtn;
 
-    RecyclerView recyclerview;
-    List<UserInfo> dataList = new ArrayList<>();
+    private RecyclerView recyclerview;
+    private List<UserInfo> dataList = new ArrayList<>();
+    private NormalAdapter mDataAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         initToolbar();
         initInstances();
+        EventBus.getDefault().register(this);
     }
 
     private void initToolbar() {
@@ -86,19 +93,42 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initRecycleView() {
-        for(int i = 0; i <  20; i++) {
-            UserInfo userInfo = new UserInfo();
-            userInfo.setKey("key " + i);
-            userInfo.setUserName("username " + i);
-            userInfo.setPassword("password " + i);
-            dataList.add(userInfo);
+        List<String> tags = UserManager.getTags(this);
+        if(tags != null && tags.size() > 0) {
+            for(String tag : tags) {
+                UserInfo userInfo = new UserInfo();
+                userInfo.setTag(tag);
+                userInfo.setUserName(UserManager.getUserInfo(this, tag).getUserName());
+                userInfo.setPassword(UserManager.getUserInfo(this, tag).getPassword());
+                dataList.add(userInfo);
+            }
         }
+
         recyclerview = (RecyclerView) findViewById(R.id.recircleView);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recyclerview.setAdapter(new NormalAdapter(this, dataList));
+        mDataAdapter = new NormalAdapter(this, dataList);
+        recyclerview.setAdapter(mDataAdapter);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setHasFixedSize(true);
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event){
+        Toast.makeText(this, "on MainActivity message evnent.", Toast.LENGTH_SHORT).show();
+        Log.w("onMessageEvent ", event.message);
+        Log.w("onMessageEvent ", event.tag);
+
+        UserInfo userInfo = UserManager.getUserInfo(this, event.tag);
+        dataList.add(userInfo);
+        mDataAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

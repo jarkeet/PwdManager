@@ -44,7 +44,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <Button
-        android:id="@+id/btn_add"
+        android:id="@+id/btn_add_userinfo"
         android:layout_marginTop="50dp"
         android:theme="@style/AppTheme.Button"
         android:layout_width="match_parent"
