@@ -3,8 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20dp"
-    >
+    android:layout_margin="20dp">
 
 
     <android.support.design.widget.TextInputLayout
@@ -12,11 +11,11 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/tv_tag"
+            android:id="@+id/edt_tag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:hint="标签" />
+            android:hint="标签/描述" />
     </android.support.design.widget.TextInputLayout>
 
 
@@ -25,7 +24,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/tv_username"
+            android:id="@+id/edt_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
@@ -37,11 +36,19 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/tv_password"
+            android:id="@+id/edt_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:hint="密码" />
     </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_add"
+        android:layout_marginTop="50dp"
+        android:theme="@style/AppTheme.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="添加"/>
 
 </LinearLayout>

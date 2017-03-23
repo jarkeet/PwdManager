@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
-        collapsingToolbarLayout.setTitle("Design Library");
+        collapsingToolbarLayout.setTitle("My Passwords");
 
         initRecycleView();
     }
