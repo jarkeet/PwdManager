@@ -14,19 +14,24 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.cmcc.jeff.pwdmanager.adapter.ItemTouchHelperCallback;
 import com.cmcc.jeff.pwdmanager.adapter.NormalAdapter;
 import com.cmcc.jeff.pwdmanager.event.MessageEvent;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.cmcc.jeff.pwdmanager.UserManager.getUserInfo;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerview;
     private List<UserInfo> dataList = new ArrayList<>();
     private NormalAdapter mDataAdapter;
+    private ItemTouchHelper itemTouchHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
         fabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSnackBar(getString(R.string.str_add_tips), getString(R.string.str_go_add));
+//                showSnackBar(getString(R.string.str_add_tips), getString(R.string.str_go_add));
+                startActivity(new Intent(MainActivity.this, AddUserInfoActivity.class));
             }
         });
 
@@ -98,9 +105,12 @@ public class MainActivity extends AppCompatActivity {
             for(String tag : tags) {
                 UserInfo userInfo = new UserInfo();
                 userInfo.setTag(tag);
-                userInfo.setUserName(UserManager.getUserInfo(this, tag).getUserName());
-                userInfo.setPassword(UserManager.getUserInfo(this, tag).getPassword());
-                dataList.add(userInfo);
+                userInfo = UserManager.getUserInfo(this, tag);
+                if(userInfo != null) {
+                    userInfo.setUserName(userInfo.getUserName());
+                    userInfo.setPassword(userInfo.getPassword());
+                    dataList.add(userInfo);
+                }
             }
         }
 
@@ -110,16 +120,17 @@ public class MainActivity extends AppCompatActivity {
         recyclerview.setAdapter(mDataAdapter);
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setHasFixedSize(true);
+        //add ItemTouchHelper to recyclerview
+        ItemTouchHelperCallback itemTouchHelperCallback = new ItemTouchHelperCallback(mDataAdapter);
+        itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerview);
 
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event){
         Toast.makeText(this, "on MainActivity message evnent.", Toast.LENGTH_SHORT).show();
-        Log.w("onMessageEvent ", event.message);
-        Log.w("onMessageEvent ", event.tag);
-
-        UserInfo userInfo = UserManager.getUserInfo(this, event.tag);
+        UserInfo userInfo = getUserInfo(this, event.tag);
         dataList.add(userInfo);
         mDataAdapter.notifyDataSetChanged();
     }

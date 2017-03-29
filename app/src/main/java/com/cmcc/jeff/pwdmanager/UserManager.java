@@ -53,6 +53,27 @@ public class UserManager {
     }
 
     /**
+     * delete the user from cache
+     * @param user
+     */
+    public static void removeUserInfo(Context context, UserInfo user) {
+        SharedPreferences sharedPref = context.getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        String tag = user.getTag();
+        List<String> tags = getTags(context);
+        if(tags.contains(tag)) {
+            tags.remove(tag);
+        }
+        String tagsStr = "";
+        for(String s : tags) {
+            tagsStr += s + COMMA;
+        }
+        editor.putString(TAGS_KEY, tagsStr);
+        editor.commit();
+
+    }
+
+    /**
      * get userInfo by tag
      * @param context
      * @param tag
@@ -94,6 +115,8 @@ public class UserManager {
         editor.putString(TAGS_KEY, tagsStr);
         editor.commit();
     }
+
+
 
     /**
      * return tags list
