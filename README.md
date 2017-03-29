@@ -11,3 +11,4 @@ Name | Introduction
 [ButterKnife](https://github.com/JakeWharton/butterknife) |  Bind Android views and callbacks to fields and methods.
 [EventBus](http://greenrobot.org/eventbus/)  |  Android optimized event bus that simplifies communication between Activities, Fragments, Threads, Services, etc. Less code, better quality. 
 [Android-Debug-Database](https://github.com/amitshekhariitbhu/Android-Debug-Database)  |  A library for debugging android databases and shared preferences - Make Debugging Great Again
+[Gson](https://github.com/google/gson)  |  A Java serialization/deserialization library that can convert Java Objects into JSON and back.

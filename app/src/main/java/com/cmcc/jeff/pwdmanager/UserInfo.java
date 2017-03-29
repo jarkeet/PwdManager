@@ -1,17 +1,10 @@
 package com.cmcc.jeff.pwdmanager;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 /**
  * Created by jeff on 2017/3/21.
  */
 
 public class UserInfo {
-
-    public static final String USERNAME = "USERNAME";
-    public static final String PASSWORD = "PASSWORD";
-    public static final String KEY = "KEY";
 
     private String tag;
     private String userName;
@@ -51,23 +44,12 @@ public class UserInfo {
         this.password = password;
     }
 
-    public void setUserInfo(String key, JSONObject jsonObject) {
-        this.tag = key;
-        this.userName = jsonObject.optString(USERNAME);
-        this.password = jsonObject.optString(PASSWORD);
-    }
-
     @Override
     public String toString() {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put(USERNAME, userName);
-            jsonObject.put(PASSWORD, password);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return "tag : " + tag + "-->"
-                + "value : " + jsonObject.toString();
+        return "UserInfo{" +
+                "tag='" + tag + '\'' +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

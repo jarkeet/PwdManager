@@ -3,11 +3,13 @@ package com.cmcc.jeff.pwdmanager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
+
 import com.cmcc.jeff.pwdmanager.utils.RSAUtil;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -40,16 +42,27 @@ public class UserManager {
     public static void saveUserInfo(Context context, UserInfo user) {
         SharedPreferences sharedPref = context.getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        JSONObject jsonobj = new JSONObject();
-        try {
-            jsonobj.put(UserInfo.USERNAME, user.getUserName());
-            jsonobj.put(UserInfo.PASSWORD, user.getPassword());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        editor.putString(user.getTag(), RSAUtil.getInstance(context).encryptData(jsonobj.toString()));
+        String jsonStr = new Gson().toJson(user);
+        editor.putString(user.getTag(), RSAUtil.getInstance(context).encryptData(jsonStr));
         editor.commit();
         addTag(context, user.getTag());
+    }
+
+    /**
+     * get userInfo by tag
+     * @param context
+     * @param tag
+     * @return
+     */
+    public static UserInfo getUserInfo(Context context, String tag) {
+        SharedPreferences sp = context.getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
+        String encstring = sp.getString(tag, null);
+        if(encstring == null) {
+            return null;
+        }
+        String originStr = RSAUtil.getInstance(context).decodeData(encstring);
+        UserInfo userInfo = new Gson().fromJson(originStr, UserInfo.class);
+        return  userInfo;
     }
 
     /**
@@ -64,39 +77,12 @@ public class UserManager {
         if(tags.contains(tag)) {
             tags.remove(tag);
         }
-        String tagsStr = "";
-        for(String s : tags) {
-            tagsStr += s + COMMA;
-        }
-        editor.putString(TAGS_KEY, tagsStr);
+        String jsonStr = new Gson().toJson(tags);
+        editor.putString(TAGS_KEY, jsonStr);
         editor.commit();
 
     }
 
-    /**
-     * get userInfo by tag
-     * @param context
-     * @param tag
-     * @return
-     */
-    public static UserInfo getUserInfo(Context context, String tag) {
-        UserInfo userInfo = new UserInfo();
-        SharedPreferences sp = context.getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
-        String encstring = sp.getString(tag, null);
-        if(encstring == null) {
-            return null;
-        }
-
-        try {
-            String originStr = RSAUtil.getInstance(context).decodeData(encstring);
-            JSONObject jsonObject = new JSONObject(originStr);
-            userInfo.setUserInfo(tag, jsonObject);
-            return  userInfo;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return  null;
-        }
-    }
 
     /**
      * update and save tags
@@ -108,11 +94,8 @@ public class UserManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         List<String> tags = getTags(context);
         tags.add(tag);
-        String tagsStr = "";
-        for(String s : tags) {
-            tagsStr += s + COMMA;
-        }
-        editor.putString(TAGS_KEY, tagsStr);
+        String jsonStr = new Gson().toJson(tags);
+        editor.putString(TAGS_KEY, jsonStr);
         editor.commit();
     }
 
@@ -127,10 +110,17 @@ public class UserManager {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
         String tags = sharedPreferences.getString(TAGS_KEY, "");
         if(TextUtils.isEmpty(tags)) {
-            return new ArrayList<String>();
+            return new ArrayList<>();
         }
-        List<String> tagsList= new ArrayList<>(Arrays.asList(tags.split("\\s*,\\s*"))); //match zero or more whitespace, acomma ,zero or more whitespace
-        return tagsList;
+//        List<String> tagsList= new ArrayList<>(Arrays.asList(tags.split("\\s*,\\s*"))); //matc zero or more whitespace, acomma ,zero or more whitespace
+        try {
+            List<String> tagsList = new Gson().fromJson(tags, new TypeToken<List<String>>(){}.getType());
+            return tagsList;
+        } catch (JsonSyntaxException ex) {
+            ex.printStackTrace();
+            return new ArrayList<>();
+        }
+
 
     }
 }

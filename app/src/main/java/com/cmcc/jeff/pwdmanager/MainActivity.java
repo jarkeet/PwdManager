@@ -18,7 +18,6 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.cmcc.jeff.pwdmanager.adapter.ItemTouchHelperCallback;
 import com.cmcc.jeff.pwdmanager.adapter.NormalAdapter;
@@ -129,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event){
-        Toast.makeText(this, "on MainActivity message evnent.", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "on MainActivity message evnent.", Toast.LENGTH_SHORT).show();
         UserInfo userInfo = getUserInfo(this, event.tag);
         dataList.add(userInfo);
         mDataAdapter.notifyDataSetChanged();

@@ -42,6 +42,8 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.5.1'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'org.greenrobot:eventbus:3.0.0'
-
+    compile 'com.google.code.gson:gson:2.8.0'
+    
     debugCompile 'com.amitshekhar.android:debug-db:1.0.0'
+
 }

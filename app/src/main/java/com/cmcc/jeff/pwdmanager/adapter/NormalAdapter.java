@@ -37,15 +37,15 @@ public class NormalAdapter extends RecyclerView.Adapter<NormalAdapter.VH> implem
     }
 
     @Override
-    public void onBindViewHolder(VH holder, final int position) {
+    public void onBindViewHolder(final VH holder, final int position) {
         holder.mTextView.setText(dataList.get(position).getTag());
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                DialogUtil.showOKDialog(mContext, dataList.get(position).getTag(),
-                        "username ： " + dataList.get(position).getUserName() +
-                        "\npassword ： " + dataList.get(position).getPassword(),
+                DialogUtil.showOKDialog(mContext, dataList.get(holder.getLayoutPosition()).getTag(),
+                        "username ： " + dataList.get(holder.getLayoutPosition()).getUserName() +
+                        "\npassword ： " + dataList.get(holder.getLayoutPosition()).getPassword(),
                         "知道了");
             }
         });
