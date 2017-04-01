@@ -21,7 +21,7 @@ import android.view.View;
 
 import com.cmcc.jeff.pwdmanager.adapter.ItemTouchHelperCallback;
 import com.cmcc.jeff.pwdmanager.adapter.NormalAdapter;
-import com.cmcc.jeff.pwdmanager.event.MessageEvent;
+import com.cmcc.jeff.pwdmanager.event.MessageAddEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,6 +34,7 @@ import static com.cmcc.jeff.pwdmanager.UserManager.getUserInfo;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String DIALOG_FRAGMENT_TAG = "MyFingerFragment";
     private Toolbar toolbar;
     private CollapsingToolbarLayout collapsingToolbarLayout;
 
@@ -127,11 +128,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent event){
+    public void onMessageEvent(MessageAddEvent event){
 //        Toast.makeText(this, "on MainActivity message evnent.", Toast.LENGTH_SHORT).show();
         UserInfo userInfo = getUserInfo(this, event.tag);
         dataList.add(userInfo);
         mDataAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
 

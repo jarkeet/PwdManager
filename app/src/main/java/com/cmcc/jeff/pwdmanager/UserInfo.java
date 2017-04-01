@@ -6,6 +6,10 @@ package com.cmcc.jeff.pwdmanager;
 
 public class UserInfo {
 
+    public static final String TAG = "tag";
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+
     private String tag;
     private String userName;
     private String password;

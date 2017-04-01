@@ -3,18 +3,18 @@ package com.cmcc.jeff.pwdmanager.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import com.cmcc.jeff.pwdmanager.MainActivity;
 import com.cmcc.jeff.pwdmanager.R;
 import com.cmcc.jeff.pwdmanager.UserInfo;
 import com.cmcc.jeff.pwdmanager.UserManager;
-import com.cmcc.jeff.pwdmanager.utils.DialogUtil;
-
+import com.cmcc.jeff.pwdmanager.finger.FingerprintAuthenticationDialogFragment;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,10 +43,20 @@ public class NormalAdapter extends RecyclerView.Adapter<NormalAdapter.VH> implem
             @Override
             public void onClick(View v) {
 
-                DialogUtil.showOKDialog(mContext, dataList.get(holder.getLayoutPosition()).getTag(),
-                        "username ： " + dataList.get(holder.getLayoutPosition()).getUserName() +
-                        "\npassword ： " + dataList.get(holder.getLayoutPosition()).getPassword(),
-                        "知道了");
+                FingerprintAuthenticationDialogFragment fragment
+                        = new FingerprintAuthenticationDialogFragment();
+                fragment.setStage(FingerprintAuthenticationDialogFragment.Stage.FINGERPRINT);
+                fragment.show(((MainActivity)mContext).getFragmentManager(), "tag");
+
+                Bundle bundle = new Bundle();
+                bundle.putString(UserInfo.TAG, dataList.get(holder.getLayoutPosition()).getTag());
+                bundle.putString(UserInfo.USERNAME, dataList.get(holder.getLayoutPosition()).getUserName());
+                bundle.putString(UserInfo.PASSWORD, dataList.get(holder.getLayoutPosition()).getPassword());
+                fragment.setArguments(bundle);
+//                DialogUtil.showOKDialog(mContext, dataList.get(holder.getLayoutPosition()).getTag(),
+//                        "username ： " + dataList.get(holder.getLayoutPosition()).getUserName() +／
+//                        "\npassword ： " + dataList.get(holder.getLayoutPosition()).getPassword(),
+//                        "知道了");
             }
         });
     }

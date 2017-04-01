@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.cmcc.jeff.pwdmanager.event.MessageEvent;
+import com.cmcc.jeff.pwdmanager.event.MessageAddEvent;
 import com.cmcc.jeff.pwdmanager.utils.KeyboardUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -63,7 +63,7 @@ public class AddUserInfoActivity extends AppCompatActivity {
 
         UserInfo userInfo = new UserInfo(tagStr ,usernameStr, passwordStr);
         UserManager.saveUserInfo(this, userInfo);
-        EventBus.getDefault().post(new MessageEvent( "MessageEvent", userInfo.getTag()));
+        EventBus.getDefault().post(new MessageAddEvent( "MessageAddEvent", userInfo.getTag()));
         finish();
     }
 
