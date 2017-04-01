@@ -29,7 +29,7 @@ import com.cmcc.jeff.pwdmanager.utils.DialogUtil;
  */
 
 public class FingerprintAuthenticationDialogFragment extends DialogFragment
-    implements FingerprintUiHelper.Callback , TextView.OnEditorActionListener{
+        implements FingerprintUiHelper.Callback, TextView.OnEditorActionListener {
 
     private static final String INIT_PASSWORD = "123456";
     private Button mCancelButton;
@@ -226,7 +226,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         String username = bundles.getString(UserInfo.USERNAME);
         String password = bundles.getString(UserInfo.PASSWORD);
         DialogUtil.showOKDialog(this.getContext(), tag, "username: " + username
-                                +"\npassword : " + password, "知道了");
+                + "\npassword : " + password, "知道了");
     }
 
     @Override

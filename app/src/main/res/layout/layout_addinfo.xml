@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20dp">
+    android:layout_margin="20dp"
+    android:orientation="vertical">
 
 
     <android.support.design.widget.TextInputLayout
@@ -14,8 +14,8 @@
             android:id="@+id/edt_tag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:hint="标签/描述" />
+            android:hint="标签/描述"
+            android:maxLines="1" />
     </android.support.design.widget.TextInputLayout>
 
 
@@ -27,8 +27,8 @@
             android:id="@+id/edt_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:hint="用户名" />
+            android:hint="用户名"
+            android:maxLines="1" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -39,16 +39,16 @@
             android:id="@+id/edt_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:hint="密码" />
+            android:hint="密码"
+            android:maxLines="1" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/btn_add_userinfo"
-        android:layout_marginTop="50dp"
-        android:theme="@style/AppTheme.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="添加"/>
+        android:layout_marginTop="50dp"
+        android:text="添加"
+        android:theme="@style/AppTheme.Button" />
 
 </LinearLayout>

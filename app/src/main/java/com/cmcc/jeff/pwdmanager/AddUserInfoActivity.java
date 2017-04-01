@@ -28,9 +28,12 @@ public class AddUserInfoActivity extends AppCompatActivity {
     private String usernameStr;
     private String passwordStr;
 
-    @BindView(R.id.edt_tag) EditText tagEdt;
-    @BindView(R.id.edt_username) EditText usernameEdt;
-    @BindView(R.id.edt_password) EditText passwordEdt;
+    @BindView(R.id.edt_tag)
+    EditText tagEdt;
+    @BindView(R.id.edt_username)
+    EditText usernameEdt;
+    @BindView(R.id.edt_password)
+    EditText passwordEdt;
 //    @BindView(R.id.btn_add) Button addBtn;
 
     @OnClick(R.id.btn_add_userinfo)
@@ -52,7 +55,7 @@ public class AddUserInfoActivity extends AppCompatActivity {
         tagStr = tagEdt.getText().toString();
         usernameStr = usernameEdt.getText().toString();
         passwordStr = passwordEdt.getText().toString();
-        if(TextUtils.isEmpty(tagStr) || TextUtils.isEmpty(usernameStr) || TextUtils.isEmpty(passwordStr)) {
+        if (TextUtils.isEmpty(tagStr) || TextUtils.isEmpty(usernameStr) || TextUtils.isEmpty(passwordStr)) {
             KeyboardUtils.hideSoftInput(this);
 //            Toast.makeText(this, "请输入完整", Toast.LENGTH_SHORT).show();
             Snackbar.make(this.getWindow().getDecorView(), "请完成所有输入！", Snackbar.LENGTH_SHORT)
@@ -61,9 +64,9 @@ public class AddUserInfoActivity extends AppCompatActivity {
             return;
         }
 
-        UserInfo userInfo = new UserInfo(tagStr ,usernameStr, passwordStr);
+        UserInfo userInfo = new UserInfo(tagStr, usernameStr, passwordStr);
         UserManager.saveUserInfo(this, userInfo);
-        EventBus.getDefault().post(new MessageAddEvent( "MessageAddEvent", userInfo.getTag()));
+        EventBus.getDefault().post(new MessageAddEvent("MessageAddEvent", userInfo.getTag()));
         finish();
     }
 

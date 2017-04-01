@@ -11,7 +11,7 @@
 
     <dimen name="expanded_toolbar_title_margin_start">64dp</dimen>
 
-    <dimen name="nav_header_text_margin_left">16dp</dimen>
+    <dimen name="nav_header_text_margin_left">5dp</dimen>
 
     <dimen name="item_content_height">45dp</dimen>
     <dimen name="cardview_height">80dp</dimen>

@@ -30,7 +30,7 @@ public class CryptoObjectHelper {
     static final String KEY_ALGRITHM = KeyProperties.KEY_ALGORITHM_AES;
     static final String BLOCK_MODE = KeyProperties.BLOCK_MODE_CBC;
     static final String ENCRYPTION_PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7;
-    static final String TRANSFORMATION = KEY_ALGRITHM + "/" + BLOCK_MODE + "/" +ENCRYPTION_PADDING;
+    static final String TRANSFORMATION = KEY_ALGRITHM + "/" + BLOCK_MODE + "/" + ENCRYPTION_PADDING;
 
     private KeyStore keyStore;
 
@@ -51,6 +51,7 @@ public class CryptoObjectHelper {
 
     /**
      * get CryptoObject for encrypt and decode, but it is not used in this demo
+     *
      * @param purpose
      * @param IV
      * @return
@@ -76,6 +77,7 @@ public class CryptoObjectHelper {
 
     /**
      * return CryptoObject with cipher，this case just use fingerprint for authn but not use key to encrypt or decode
+     *
      * @return
      */
     public FingerprintManager.CryptoObject buildCryptoObject() {
@@ -94,9 +96,9 @@ public class CryptoObjectHelper {
         }
     }
 
-    private Key getKey() throws Exception{
+    private Key getKey() throws Exception {
         Key secretKey;
-        if(!keyStore.isKeyEntry(KEY_NAME)) {
+        if (!keyStore.isKeyEntry(KEY_NAME)) {
             generateKey(false);
         }
 
