@@ -105,7 +105,11 @@ public class MainActivity extends AppCompatActivity {
             for(String tag : tags) {
                 UserInfo userInfo = new UserInfo();
                 userInfo.setTag(tag);
-                userInfo = UserManager.getUserInfo(this, tag);
+                try {
+                    userInfo = UserManager.getUserInfo(this, tag);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 if(userInfo != null) {
                     userInfo.setUserName(userInfo.getUserName());
                     userInfo.setPassword(userInfo.getPassword());
@@ -130,7 +134,12 @@ public class MainActivity extends AppCompatActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageAddEvent event){
 //        Toast.makeText(this, "on MainActivity message evnent.", Toast.LENGTH_SHORT).show();
-        UserInfo userInfo = getUserInfo(this, event.tag);
+        UserInfo userInfo = null;
+        try {
+            userInfo = getUserInfo(this, event.tag);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         dataList.add(userInfo);
         mDataAdapter.notifyDataSetChanged();
     }

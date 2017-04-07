@@ -48,6 +48,22 @@ public class AddUserInfoActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         KeyboardUtils.showSoftInput(this, tagEdt);
+        passwordEdt.setText("jiasndfnasjdifjasodnfaksdfsdfMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs8gdZJFYUWXk2W9zuVT2FoM1K/erUdWb\n" +
+                "06pUdNrKcT7cwXl/2o+zXxd7n2oo5oaDlVuNdVzXAlQFKlh1mMaO0zoiRTz3VlVqHgIH1ya5Zfub\n" +
+                "y+cb505geeNELImxzcrm1JaWChkFqi+Kc0CtcoU1V4g+1h8P7EZz3NWP4tOc5dN9Tb3ZA8txpAAL\n" +
+                "W2JHRU8+lzyTb/ayTABMCZkyk1thLgmngYNxMRmAEU41OlLS6R+Tee/lgPmwzUlO2PpDIBR+1JYS\n" +
+                "2NNkRTSTo9sApcLj31MCFymsyEd4/HSgMaWbtpp4EhAk6h15kGC/XB42DYkVRiFSPdFj4EUDsdGd\n" +
+                "EMdcJQIDAQABMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs8gdZJFYUWXk2W9zuVT2FoM1K/erUdWb\n" +
+                "06pUdNrKcT7cwXl/2o+zXxd7n2oo5oaDlVuNdVzXAlQFKlh1mMaO0zoiRTz3VlVqHgIH1ya5Zfub\n" +
+                "y+cb505geeNELImxzcrm1JaWChkFqi+Kc0CtcoU1V4g+1h8P7EZz3NWP4tOc5dN9Tb3ZA8txpAAL\n" +
+                "W2JHRU8+lzyTb/ayTABMCZkyk1thLgmngYNxMRmAEU41OlLS6R+Tee/lgPmwzUlO2PpDIBR+1JYS\n" +
+                "2NNkRTSTo9sApcLj31MCFymsyEd4/HSgMaWbtpp4EhAk6h15kGC/XB42DYkVRiFSPdFj4EUDsdGd\n" +
+                "EMdcJQIDAQABMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs8gdZJFYUWXk2W9zuVT2FoM1K/erUdWb\n" +
+                "06pUdNrKcT7cwXl/2o+zXxd7n2oo5oaDlVuNdVzXAlQFKlh1mMaO0zoiRTz3VlVqHgIH1ya5Zfub\n" +
+                "y+cb505geeNELImxzcrm1JaWChkFqi+Kc0CtcoU1V4g+1h8P7EZz3NWP4tOc5dN9Tb3ZA8txpAAL\n" +
+                "W2JHRU8+lzyTb/ayTABMCZkyk1thLgmngYNxMRmAEU41OlLS6R+Tee/lgPmwzUlO2PpDIBR+1JYS\n" +
+                "2NNkRTSTo9sApcLj31MCFymsyEd4/HSgMaWbtpp4EhAk6h15kGC/XB42DYkVRiFSPdFj4EUDsdGd\n" +
+                "EMdcJQIDAQAB");
 
     }
 
@@ -65,7 +81,11 @@ public class AddUserInfoActivity extends AppCompatActivity {
         }
 
         UserInfo userInfo = new UserInfo(tagStr, usernameStr, passwordStr);
-        UserManager.saveUserInfo(this, userInfo);
+        try {
+            UserManager.saveUserInfo(this, userInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         EventBus.getDefault().post(new MessageAddEvent("MessageAddEvent", userInfo.getTag()));
         finish();
     }

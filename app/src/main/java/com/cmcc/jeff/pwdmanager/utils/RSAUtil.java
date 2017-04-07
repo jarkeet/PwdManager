@@ -5,10 +5,10 @@ import android.util.Base64;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -19,16 +19,23 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 /**
  * Created by jeff on 2017/3/20.
+ * 加密分段，解密当然也要分段了。当密钥的长度为1024时，小于117字节的明文，加密后长度都是128字节（所以分段加密后，密文的长度都是128的整数倍），
+ * 所以上面rsa最大解密密文大小设置为128。但是，如果密钥的长度为2048时，这个值就要随之翻倍，设置为256。如果仍设置为128，则会抛出异常
  */
 
 public class RSAUtil {
+
+
+    /** RSA最大加密明文大小 */
+    private static final int MAX_ENCRYPT_BLOCK = 117;
+
+    /** RSA最大解密密文大小 */
+    private static final int MAX_DECRYPT_BLOCK = 256;
+
 
     static {
         System.loadLibrary("native-lib");
@@ -171,53 +178,66 @@ public class RSAUtil {
 
 
     /**
-     * 数据加密, base64处理
+     * 数据分段加密, base64处理
      * @param source
      * @return
      */
-    public String encryptData(String source) {
-        try {
-            Cipher cipher = Cipher.getInstance(CIPHER_ALGRITHM);
-            cipher.init(Cipher.ENCRYPT_MODE, this.publicKey);
-            return  Base64.encodeToString(cipher.doFinal(source.getBytes()), Base64.DEFAULT);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
+    public String encryptData(String source) throws Exception{
+
+        Cipher cipher = Cipher.getInstance(CIPHER_ALGRITHM);
+        cipher.init(Cipher.ENCRYPT_MODE, this.publicKey);
+
+        byte[] dataByte = source.getBytes();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] cache;
+        int dataLength = dataByte.length;
+        int offset = 0;
+        while( dataLength - offset > 0 ) {
+            if(dataLength - offset > MAX_ENCRYPT_BLOCK) {
+                cache = cipher.doFinal(dataByte, offset, MAX_ENCRYPT_BLOCK);
+            } else {
+                cache = cipher.doFinal(dataByte, offset, dataLength - offset);
+            }
+            offset += MAX_ENCRYPT_BLOCK;
+            baos.write(cache, 0, cache.length);
+
         }
-        return null;
+        byte[] encrytData = baos.toByteArray();
+        LogUtil.debug("enc data length", encrytData.length + "");
+
+        baos.close();
+        return  Base64.encodeToString(encrytData, Base64.DEFAULT);
     }
 
     /**
-     * 数据解密
+     * 数据分段解密
      * @param encSource
      * @return
      */
-    public String decodeData(String encSource) {
-        try {
-            byte[] data = Base64.decode(encSource.getBytes(), Base64.DEFAULT);
-            Cipher cipher = Cipher.getInstance(CIPHER_ALGRITHM);
-            cipher.init(Cipher.DECRYPT_MODE, this.privateKey);
-            return new String(cipher.doFinal(data));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public String decodeData(String encSource) throws Exception{
 
+        byte[] data = Base64.decode(encSource.getBytes(), Base64.DEFAULT);
+        Cipher cipher = Cipher.getInstance(CIPHER_ALGRITHM);
+        cipher.init(Cipher.DECRYPT_MODE, this.privateKey);
+
+        int dataLength = data.length;
+        LogUtil.debug("dec data length", dataLength + "");
+        int offset = 0;
+        byte[] cache;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        while (dataLength - offset > 0) {
+            if(dataLength - offset > MAX_DECRYPT_BLOCK) {
+                cache = cipher.doFinal(data, offset, MAX_DECRYPT_BLOCK);
+            } else {
+                cache = cipher.doFinal(data, offset, dataLength - offset);
+            }
+            offset += MAX_DECRYPT_BLOCK;
+            baos.write(cache, 0, cache.length);
+        }
+
+        byte[] decodeData = baos.toByteArray();
+        baos.close();
+        return new String(decodeData);
     }
 
 

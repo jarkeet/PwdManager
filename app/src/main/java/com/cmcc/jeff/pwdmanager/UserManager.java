@@ -39,7 +39,7 @@ public class UserManager {
      * @param context
      * @param user
      */
-    public static void saveUserInfo(Context context, UserInfo user) {
+    public static void saveUserInfo(Context context, UserInfo user) throws Exception {
         SharedPreferences sharedPref = context.getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         String jsonStr = new Gson().toJson(user);
@@ -54,7 +54,7 @@ public class UserManager {
      * @param tag
      * @return
      */
-    public static UserInfo getUserInfo(Context context, String tag) {
+    public static UserInfo getUserInfo(Context context, String tag) throws Exception {
         SharedPreferences sp = context.getSharedPreferences(SP_FILE_NAME, Context.MODE_PRIVATE);
         String encstring = sp.getString(tag, null);
         if(encstring == null) {
